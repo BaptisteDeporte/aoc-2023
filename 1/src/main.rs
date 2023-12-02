@@ -13,24 +13,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // next step -> filter sur is_numeric, prendre les extreme
     let sum: i32 = lines
         .map(|line| {
-            let mut line_chars = line.chars();
-            let mut revert_line_chars = line.chars().rev();
-            let first_digit_index = &line_chars
-                .clone()
-                .position(|char| char.is_numeric())
-                .unwrap();
-            let last_digit_index = &revert_line_chars
-                .clone()
-                .position(|char| char.is_numeric())
-                .unwrap();
-
-            let first_digit = line_chars.nth(*first_digit_index).unwrap();
-            let last_digit = revert_line_chars.nth(*last_digit_index).unwrap();
-            // return first_digit.unwrap();
+            let mut numerics_values = line.chars().filter(|char| char.is_ascii_digit());
+            let first_digit = numerics_values.next().unwrap();
+            let last_digit = numerics_values.last().unwrap_or(first_digit);
             let mut digit_string = String::from(first_digit);
             digit_string.push(last_digit);
-            let digit = i32::from_str_radix(&digit_string, 10);
-            return digit.unwrap();
+            return i32::from_str_radix(&digit_string, 10).unwrap();
         })
         .sum();
     println!("{:?}", sum);
