@@ -1,7 +1,9 @@
 use reqwest::header::COOKIE;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let session = std::env::var("SESSION")?;
+    let session = std::env::var("SESSION")
+        .map_err(|err| format!("Error while fetching \"SESSION\" var env : {}", err))
+        .unwrap();
 
     let client = reqwest::blocking::Client::new();
     let resp = client
@@ -14,7 +16,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let sum: i32 = lines
         .map(|line| {
             let mut numerics_values = line.chars().filter(|char| char.is_ascii_digit());
-            let first_digit = numerics_values.next().unwrap();
+            let first_digit = match numerics_values.next() {
+                Some(char_digit) => char_digit,
+                None => panic!("None digit found for this line: {}", line),
+            };
             let last_digit = numerics_values.last().unwrap_or(first_digit);
             let mut digit_string = String::from(first_digit);
             digit_string.push(last_digit);
