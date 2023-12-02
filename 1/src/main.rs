@@ -26,6 +26,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             return i32::from_str_radix(&digit_string, 10).unwrap();
         })
         .sum();
-    println!("{:?}", sum);
+    println!("Sum of all of the calibration values: {:?}", sum);
     Ok(())
 }
