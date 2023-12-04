@@ -13,7 +13,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .text_with_charset("utf-8")?;
     let lines = resp.lines();
     // next step -> filter sur is_numeric, prendre les extreme
-    let sum: i32 = lines
+    let sum: u32 = lines
         .map(|line| {
             let mut numerics_values = line.chars().filter(|char| char.is_ascii_digit());
             let first_digit = match numerics_values.next() {
@@ -23,7 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let last_digit = numerics_values.last().unwrap_or(first_digit);
             let mut digit_string = String::from(first_digit);
             digit_string.push(last_digit);
-            return i32::from_str_radix(&digit_string, 10).unwrap();
+            return u32::from_str_radix(&digit_string, 10).unwrap();
         })
         .sum();
     println!("Sum of all of the calibration values: {:?}", sum);
